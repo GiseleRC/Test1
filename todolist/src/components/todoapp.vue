@@ -4,8 +4,8 @@
 
     <!-- inputs -->
     <div class="d-flex">
-      <input type="text" placeholder="Enter task" class="form-control">
-      <button class="btn btn-warning rounded-0">Submit</button>
+      <input v-model="task" type="text" placeholder="Enter task" class="form-control">
+      <button @click="submitTask" class="btn btn-warning rounded-0">Submit</button>
     </div>
     <!-- task tab -->
     <table class="table table-bordered mt-5">
@@ -13,21 +13,25 @@
         <tr>
           <th scope="col" class="text-center">Task</th>
           <th scope="col" class="text-center">Status</th>
-          <th scope="col">Edit</th>
-          <th scope="col">Delete</th>
+          <th scope="col" class="text-center">Edit</th>
+          <th scope="col" class="text-center">Delete</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="(task, index) in tasks" :key="index">
           <td>{{task.name}}</td>
-          <td>{{task.status}}</td>
           <td>
-            <div class="text-center">
+            <span @click="changeStatus(index)" class="pointer">
+              {{task.status}}
+            </span>
+          </td>
+          <td>
+            <div class="text-center" @click="editTask(index)">
               <span class="fa fa-pen"></span>
             </div>
           </td>
           <td>
-            <div class="text-center">
+            <div class="text-center" @click="deleteTask(index)">
               <span class="fa fa-trash"></span>
             </div>
           </td>
@@ -46,24 +50,60 @@ export default {
 
   data(){
     return {
+      task: '',
+      editedTask: null,
+      availableStatusses: ['to-do, in-progress', 'finished'],
+
       tasks: [
         {
           name: 'Go to the market',
           status: 'To-do',
-
-        },
+          },
         {
           name: 'Go to the bed',
           status: 'In-progres',
         }
       ]
     }
-  }
-}
+  },
+
+  methods: {
+    submitTask(){
+      if(this.task.lenth === 0) return;
+
+      if(this.editedTask === null){
+          this.tasks.push({
+          name: this.task, 
+          status: 'to-do'
+        });
+      }else{
+        this.tasks[this.editedTask].name = this.task;
+        this.editedTask = null;
+      }
+
+      this.task = '';
+    },
+  
+    deleteTask(index){
+      this.tasks.splice(index, 1);
+    },
+
+    editTask(index){
+      this.task = this.tasks[index].name;
+      this.editedTask = index;
+    },
+
+    changeStatus(index){
+      let newIndex = this.availableStatusses.indexOf(this.tasks[index].status);
+      if(++newIndex > 2) newIndex = 0;
+      this.tasks[index].status = this.availableStatusses[newIndex];
+    },
+  } 
+};
 </script>
-
-
-<style scoped>
-
- 
+<!-- coment -->
+<style scoped> 
+  .pointer {
+    cursor: pointer;
+  }
 </style>
