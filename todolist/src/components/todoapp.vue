@@ -1,12 +1,15 @@
 <template>
+  
   <div class="container" >
     <h2 class="text-center mt-5">My vue todo app</h2>
 
     <!-- inputs -->
-    <div class="d-flex">
-      <input v-model="task" type="text" placeholder="Enter task" class="form-control">
-      <button @click="submitTask" class="btn btn-warning rounded-0">Submit</button>
-    </div>
+    <form method="post" action="">
+      <div class="d-flex">
+        <input v-model="task" type="text" placeholder="Enter task" class="form-control">
+        <button @click="submitTask" class="btn btn-warning rounded-0">Submit</button>
+      </div>
+    </form>
     <!-- task tab -->
     <table class="table table-bordered mt-5">
       <thead>
@@ -23,7 +26,12 @@
             <span :class="{'finished': task.status === 'finished'}">{{task.name}}</span>
           </td>
           <td style="width: 120px">
-            <span @click="changeStatus(index)" class="pointer">
+            <span @click="changeStatus(index)" class="pointer"
+              :class="{'text-danger': task.status === 'to-do', 
+              'text-warning': task.status === 'in-progress',
+              'text-success': task.status === 'finished'
+              }"
+            >
               {{firstCharUpper(task.status)}}
             </span>
           </td>
