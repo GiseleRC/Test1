@@ -23,12 +23,7 @@
             <span :class="{'finished': task.status === 'finished'}">{{task.name}}</span>
           </td>
           <td style="width: 120px">
-            <span @click="changeStatus(index)" class="pointer"
-              :class="{'text-danger' : task.status === 'to-do',
-              'text-warning' : task.status === 'in-progress',
-              'text-success' : task.status === 'finished',
-              }"
-            >
+            <span @click="changeStatus(index)" class="pointer">
               {{firstCharUpper(task.status)}}
             </span>
           </td>
